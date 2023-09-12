@@ -1,0 +1,19 @@
+package com.test.app.Controller;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Controller
+@Slf4j
+public class MembershipController {
+
+	@GetMapping("/membership")
+	public void f10() {
+		log.info("GET /membership");
+		
+	}
+}

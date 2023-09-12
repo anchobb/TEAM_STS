@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/member")
 public class MemberController {
 
+	
 	@Autowired
 	MemberService memberService;
 
@@ -65,9 +65,10 @@ public class MemberController {
 	}
 	
 	@PostMapping("/remove")
-	public void f5(@RequestParam String id) {
+	public String f5(@RequestParam String id) {
 		log.info("POST /member/delete");
 		memberService.removeMember(id);
+		return "/member/member";
 	}
 
 	@GetMapping("/login")
@@ -87,6 +88,8 @@ public class MemberController {
 		return "/member/login";
 	}
 
+	
+	
 	@GetMapping("/mypage")
 	public String f7(HttpSession session, Authentication authentication, Model model) {
 		System.out.println("authentication : " + authentication);
@@ -133,5 +136,6 @@ public class MemberController {
 
 	    model.addAttribute("list", userDtoList);
 	}
+	
 
 }

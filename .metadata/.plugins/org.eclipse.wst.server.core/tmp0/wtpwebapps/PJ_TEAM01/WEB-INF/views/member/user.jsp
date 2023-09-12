@@ -39,7 +39,7 @@
 		<li><span class="title">ADDR</span><hr/><span class="info"><sec:authentication property="principal.addr" /></span></li>
 		<br />
 		<li><span class="title">PHONE</span><hr/><span class="info"><sec:authentication property="principal.phone" /></span></li>
-		<button id="back_btn" onclick= "location.href='${pageContext.request.contextPath}/indexlog'">이전</button>
+		<button id="back_btn" onclick="window.history.go(-1)">이전</button>
 		<button id="update_btn" onclick = "location.href='${pageContext.request.contextPath}/member/update'">정보수정</button>
 	</c:if>
 
@@ -53,7 +53,7 @@
 		<li><span class="title">ADDR</span><hr/><span class="info"><sec:authentication property="principal.addr" /></span></li>
 		<br />
 		<li><span class="title">PHONE</span><hr/><span class="info"><sec:authentication property="principal.phone" /></span></li>
-		<button id="back_btn" onclick= "location.href='${pageContext.request.contextPath}/indexlog.do'">이전</button>
+		<button id="back_btn" onclick="window.history.go(-1)">이전</button>	
 		<button id="update_btn" onclick = "location.href='${pageContext.request.contextPath}/member/update.do'">정보수정</button>
 		<br />
 	</c:if>
@@ -67,7 +67,7 @@
            <li><a href="">이용약관</a></li>
            <li><a href="">고객센터</a></li>
            <li><a href="">제휴/프로모션</a></li>
-           <li><a href=""> 개인정보처리방침</a></li>
+           <li style="width:170px"><a href=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;개인정보처리방침</a></li>
         </ul>
     </div>
     <p></p>

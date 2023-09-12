@@ -34,6 +34,9 @@ public class MemberService{
 		memberMapper.insert(dto);
 	}
 	
+	
+	
+	
 	@Transactional(rollbackFor = Exception.class)
 	public void modifyMember(MemberDto dto) {
 		memberMapper.update(dto);

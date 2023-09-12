@@ -18,14 +18,14 @@
 
 .wrapper>footer>div>.footer_menu>li{
     /* border: 1px solid red; */
-    width: 140px;
+    width: 120px;
     height: 30px;
     line-height: 30px;
 }
 
 .wrapper>footer>div>.footer_menu>li>a{
-    font-family: 'NanumSquareAceb'; 
-    font-size: 17px;
+    font-family: 'SDSamliphopangche_Basic'; 
+    font-size: 20px;
 }
 
 .wrapper>footer>.Site_info{
@@ -49,6 +49,6 @@
 }
 
 .wrapper>footer>.Site_info>.Sitename{
-    font-family: 'NanumSquareAceb'; 
+    font-family: 'SDSamliphopangche_Basic'; 
     font-size: 17px;
 }

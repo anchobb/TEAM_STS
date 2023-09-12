@@ -91,7 +91,7 @@
 					<li><a href="">이용약관</a></li>
 					<li><a href="">고객센터</a></li>
 					<li><a href="">제휴/프로모션</a></li>
-					<li><a href=""> 개인정보처리방침</a></li>
+					<li style="width:170px"><a href=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;개인정보처리방침</a></li>
 				</ul>
 			</div>
 			<p></p>
@@ -133,11 +133,21 @@
 			xhr.send();
 		}
 	</script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	
 	<script>
-		document.getElementById("join_btn").addEventListener('click', function(){
-			location.href = "http://localhost:8080/app/member/login";
-		})
+	const join_btn_el = document.querySelector('.join_btn');
+    join_btn_el.addEventListener('click', function () {
+        axios.post('http://localhost:8080/app/member/join')
+        .then(response=>{
+            console.log("join Success");
+            console.log(response);
+            console.log(response.data);
+            window.location.href = 'http://localhost:8080/app/member/login'
+        })
+        .catch(error=>{});
+		
+		
 	</script>
 	
 	

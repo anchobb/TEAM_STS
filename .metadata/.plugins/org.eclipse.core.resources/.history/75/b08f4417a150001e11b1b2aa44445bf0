@@ -1,0 +1,125 @@
+package com.test.app.Controller;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+
+@Controller
+@Slf4j
+public class MembershipController {
+	private final String ADMIN_KEY = "ae39e2b27d5011a69f526b76f277ed62";
+
+	@GetMapping("/membership")
+	public void membership() {
+		log.info("GET /membership");
+	}
+	
+	@GetMapping("/membership/request1")
+	public @ResponseBody membershipResponse pay1() {
+		//url
+		String url = "https://kapi.kakao.com/v1/payment/ready";
+		
+		//header
+		HttpHeaders header1 = new HttpHeaders();
+        header1.add("Authorization", "KakaoAK "+ ADMIN_KEY);
+        header1.add("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+		
+		//parameter
+        MultiValueMap<String, String> param1 = new LinkedMultiValueMap<>();
+        param1.add("cid", "TCSUBSCRIP");
+        param1.add("partner_order_id", "subscription_order_id_1");
+        param1.add("partner_user_id", "subscription_user_id_1");
+        param1.add("item_name","WATERMELON 스트리밍 정기결제");
+        param1.add("quantity","1");
+        param1.add("total_amount", "6900");
+        param1.add("tax_free_amount", "0");
+        param1.add("approval_url", "http://localhost:8080/app/membership/success");
+        param1.add("fail_url", "http://localhost:8080/app/membership/fail");
+        param1.add("cancel_url", "http://localhost:8080/app/membership/cancel");
+		
+        //HEADER + PARAMETER
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(param1,header1);
+
+
+        //REQUEST
+        RestTemplate rt1 = new RestTemplate();
+        membershipResponse response1 = rt1.postForObject(url, entity, membershipResponse.class);
+        System.out.println(response1);
+		
+		return response1;
+	}
+	
+	@GetMapping("/membership/request2")
+	public @ResponseBody membershipResponse pay2() {
+		//url
+		String url = "https://kapi.kakao.com/v1/payment/ready";
+		
+		//header
+		HttpHeaders header2 = new HttpHeaders();
+        header2.add("Authorization", "KakaoAK "+ ADMIN_KEY);
+        header2.add("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+		
+		//parameter
+        MultiValueMap<String, String> param2 = new LinkedMultiValueMap<>();
+        param2.add("cid", "TCSUBSCRIP");
+        param2.add("partner_order_id", "subscription_order_id_1");
+        param2.add("partner_user_id", "subscription_user_id_1");
+        param2.add("item_name","WATERMELON 스트리밍+오프라인 정기결제");
+        param2.add("quantity","1");
+        param2.add("total_amount", "9900");
+        param2.add("tax_free_amount", "0");
+        param2.add("approval_url", "http://localhost:8080/app/membership/success");
+        param2.add("fail_url", "http://localhost:8080/app/membership/fail");
+        param2.add("cancel_url", "http://localhost:8080/app/membership/cancel");
+		
+        //HEADER + PARAMETER
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(param2,header2);
+
+
+        //REQUEST
+        RestTemplate rt2 = new RestTemplate();
+        membershipResponse response2 = rt2.postForObject(url, entity, membershipResponse.class);
+        System.out.println(response2);
+		
+		return response2;
+	}
+	
+	
+		@GetMapping("/membership/success")
+	 	public @ResponseBody String success() {
+	        log.info("GET /membership/success");
+	        return "Subscribe Success!";
+	    }
+	    @GetMapping("/membership/cancel")
+	    public @ResponseBody String cancel() {
+	        log.info("GET /membership/cancel");
+	        return "Subscribe Cancel..";
+	    }
+	    @GetMapping("/membership/fail")
+	    public @ResponseBody String fail() {
+	        log.info("GET /membership/fail");
+	        return "Subscribe Fail..";
+	    }
+	
+}
+
+@Data
+class membershipResponse {
+    private String tid;
+    private boolean tms_result;
+    private String next_redirect_app_url;
+    private String next_redirect_mobile_url;
+    private String next_redirect_pc_url;
+    private String android_app_scheme;
+    private String ios_app_scheme;
+    private String created_at;
+
+}

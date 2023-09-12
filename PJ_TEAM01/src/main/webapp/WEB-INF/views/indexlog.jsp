@@ -30,7 +30,7 @@
                 </div>
                 </form>
                 <ul>
-                    <li><a href="" style="color:rgb(92, 115, 6); font-family: 'SDSamliphopangche_Basic'; font-size: 19px;"><img
+                    <li><a href=<c:url value="/membership" /> style="color:rgb(92, 115, 6); font-family: 'SDSamliphopangche_Basic'; font-size: 19px;"><img
                                 src="resources/static/img/add.png" alt=""> 멤버십가입</a></li>
                     <li><a href=""><img src="resources/static/img/english.png" alt="">ENGLISH</a></li>
                 </ul>
@@ -151,7 +151,7 @@
                 <article>멤버십 이벤트<br><br />
                     <span>워터멜론을 구독해보세요!</span>
                     <span>첫 구독 1개월 무료</span>
-                    <div><a href="">구독하기</a></div>
+                    <div><a href=<c:url value="/membership" />>구독하기</a></div>
                 </article>
                 <aside>
                     <div class="top10">
@@ -229,7 +229,7 @@
                     <li><a href="">이용약관</a></li>
                     <li><a href="">고객센터</a></li>
                     <li><a href="">제휴/프로모션</a></li>
-                    <li><a href=""> 개인정보처리방침</a></li>
+                    <li style="width:170px"><a href=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;개인정보처리방침</a></li>
                 </ul>
             </div>
             <p></p>

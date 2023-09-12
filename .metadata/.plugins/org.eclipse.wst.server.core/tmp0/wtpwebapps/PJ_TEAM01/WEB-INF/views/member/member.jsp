@@ -46,8 +46,8 @@
 		<br />
 		<li><span class="title">회원 삭제</span><hr/></li>
 		<form action="${pageContext.request.contextPath}/member/remove" method="post">
-    	<input type="text" id="remove_input" name="id" placeholder="사용자 검색" id="searchInput">
-    	<button class="removeuser" type="submit" >삭제</button>
+    	<input type="text" id="remove_input" name="id" placeholder="사용자 검색">
+    	<button class="removeuser">삭제</button>
 		</form>
 		<br />
 	</ul>
@@ -97,7 +97,7 @@
            <li><a href="">이용약관</a></li>
            <li><a href="">고객센터</a></li>
            <li><a href="">제휴/프로모션</a></li>
-           <li><a href=""> 개인정보처리방침</a></li>
+           <li style="width:170px"><a href=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;개인정보처리방침</a></li>
         </ul>
     </div>
     <p></p>
@@ -154,12 +154,12 @@
 	
 	document.addEventListener("DOMContentLoaded", function () {
 	    const form = document.querySelector('form');
-	    const searchInput = document.querySelector('#searchInput');
+	    const searchInput = document.querySelector('#remove_input');
 
 	    form.addEventListener('submit', function (event) {
 	        event.preventDefault();
 
-	        const searchValue = searchInput.value;
+	        const searchValue = remove_input.value;
 
 	        // Axios를 사용한 POST 요청
 	        axios.post('/app/member/remove', null, {
