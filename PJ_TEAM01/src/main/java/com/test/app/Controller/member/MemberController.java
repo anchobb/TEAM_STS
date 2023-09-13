@@ -3,12 +3,14 @@ package com.test.app.Controller.member;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,13 +70,15 @@ public class MemberController {
 	public String f5(@RequestParam String id) {
 		log.info("POST /member/delete");
 		memberService.removeMember(id);
-		return "/member/member";
+		return "redirect:member";
 	}
 
 	@GetMapping("/login")
 	public void f5() {
 		log.info("GET /login");
+		
 	}
+	
 
 	@GetMapping("/join")
 	public void f6() {
@@ -85,7 +89,7 @@ public class MemberController {
 	public String f6(@ModelAttribute MemberDto dto) {
 		memberService.addMember(dto);
 		log.info("POST /join");
-		return "/member/login";
+		return "redirect:login";
 	}
 
 	

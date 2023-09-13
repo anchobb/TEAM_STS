@@ -29,10 +29,21 @@
 	<ul>
 		<li><span class="title">전체회원조회<button class="alluser" id="showButton">조회하기</button></span><hr/></li>
 		<div class="selectall">
-    	<c:forEach items="${list}" var="dto">
+    	<%-- <c:forEach items="${list}" var="dto">
 			<span>${dto.id}</span>&nbsp;&nbsp;<span>${dto.name}</span>
 			&nbsp;&nbsp;<span>${dto.addr}</span>&nbsp;&nbsp;<span>${dto.phone}</span><br/>
+		</c:forEach> --%>
+    	<c:forEach items="${list}" var="dto">
+			<table>
+				<tr>
+					<td style="width:100px; height:25px;">${dto.id}</td>
+					<td style="width:100px; height:25px;">${dto.name}</td>
+					<td style="width:100px; height:25px;">${dto.addr}</td>
+					<td style="width:100px; height:25px;">${dto.phone}</td>
+				</tr>
+			</table>
 		</c:forEach>
+    	
     	</div>
 		<br />
 		<li><span class="title">회원 검색</span><hr/></li>
@@ -51,43 +62,6 @@
 		</form>
 		<br />
 	</ul>
-
-
-
-
-
-
-
-<%--
- <div>
-	<hr/>
-	<a href="javascript:history.go(-1)">이전으로</a>
-	
-	<form action="${pageContext.request.contextPath}/member/remove" method="post">
-    	<input type="text" name="id" placeholder="사용자 검색" id="searchInput">
-    	<button type="submit" >삭제</button>
-	</form>
-</div>
-
-    <button class="alluser" id="showButton">모든회원검색</button>
-    <div class="selectall">
-    	<c:forEach items="${list}" var="dto">
-			<span>${dto.id}</span>&nbsp;&nbsp;<span>${dto.name}</span>
-			&nbsp;&nbsp;<span>${dto.addr}</span>&nbsp;&nbsp;<span>${dto.phone}</span><br/>
-		</c:forEach>
-    </div>
-    <hr />
-
-	
-    <form action="member/search" method="post">
-    <div class="search_block" style= display="none">
-    <input type="text" name="id" placeholder="검색할 id를 입력하세요">
-    <button class="oneuser" type="submit" >검색</button>
-    </div>
-    <div class="oneshowBlock"></div>
-    <hr />
-	</form>  
-	--%>
 
 </section>
 <footer>
@@ -116,92 +90,29 @@
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-	/* const search_btn_el=document.querySelector('.oneuser');
-	search_btn_el.addEventListener('click',function(){
-	const projectPath = '${pageContext.request.contextPath}';
-	console.log("search_btn_el click",projectPath);
-	
-	//axios
-	axios.post("http://localhost:9090" + projectPath + "/member/search.do", {
-	    id: document.querySelector('input[name="id"]').value 
-	  })
-	    .then(response => {
-	      console.log("success!", response.data);
-	      const show_block_el = document.querySelector('.oneshowBlock');
-	      
-	      const list = response.data;
 
-	      list.forEach((dto) => {
-	        console.log('dto', dto);
-	        const dto_el = document.createElement('div');
-	        dto_el.classList.add("item");
-
-	        dto_el.innerHTML += "<span>" + dto.id + "</span>";
-	        dto_el.innerHTML += "<span>" + dto.role + "</span>";
-	        dto_el.innerHTML += "<span>" + dto.name + "</span>";
-	        dto_el.innerHTML += "<span>" + dto.addr + "</span>";
-	        dto_el.innerHTML += "<span>" + dto.phone + "</span><br/>";
-	        show_block_el.appendChild(dto_el); 
-	      })
-	    })
-	    .catch(error => { console.log("fail.."); })
-	});  */ 
-	
-	</script>
 	
 	<script>
-	
-	document.addEventListener("DOMContentLoaded", function () {
-	    const form = document.querySelector('form');
-	    const searchInput = document.querySelector('#remove_input');
-
-	    form.addEventListener('submit', function (event) {
-	        event.preventDefault();
-
-	        const searchValue = remove_input.value;
-
-	        // Axios를 사용한 POST 요청
-	        axios.post('/app/member/remove', null, {
-           		params: { id: searchValue } // id 파라미터를 직접 설정
-        	})
-	            .then(function (response) {
-	                // 성공적으로 서버에서 응답을 받았을 때 처리
-	              
-	                alert('삭제가 완료되었습니다.');
-	                // 원하는 추가 동작 수행
-	            })
-	            .catch(function (error) {
-	            	if (error.response) {
-	                    console.error('서버 응답 오류:', error.response.data);
-	                } else {
-	                    console.error('요청 오류:', error.message);
-	                }
-	                // 오류가 발생했을 때 처리
-	                alert('삭제에 실패했습니다.');
-	                
-	            });
-	    });
-	});
+	//회원 전체조회 script
+		document.addEventListener('DOMContentLoaded', function() {
+	       // 버튼 클릭 이벤트 핸들러
+	       var showButton = document.getElementById('showButton');
+	       var selectAllDiv = document.querySelector('.selectall');
+	       
+	       showButton.addEventListener('click', function() {
+	           // 현재 상태를 확인하여 토글
+	           if (selectAllDiv.style.display === 'none' || selectAllDiv.style.display === '') {
+	               selectAllDiv.style.display = 'block'; // 보이도록 함
+	           } else {
+	               selectAllDiv.style.display = 'none'; // 숨김
+	           }
+	       });
+	   });
 	
 	
+	//회원 단건조회 script
 	
-	
-	
-	document.addEventListener('DOMContentLoaded', function() {
-	    // 버튼 클릭 이벤트 핸들러
-	    var showButton = document.getElementById('showButton');
-	    var selectAllDiv = document.querySelector('.selectall');
-	    
-	    showButton.addEventListener('click', function() {
-	        // 현재 상태를 확인하여 토글
-	        if (selectAllDiv.style.display === 'none' || selectAllDiv.style.display === '') {
-	            selectAllDiv.style.display = 'block'; // 보이도록 함
-	        } else {
-	            selectAllDiv.style.display = 'none'; // 숨김
-	        }
-	    });
-	});
+	//회원 삭제 script
 	
 	</script>
 

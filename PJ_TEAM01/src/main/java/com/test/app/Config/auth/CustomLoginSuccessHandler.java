@@ -8,10 +8,14 @@ import java.util.Collection;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.test.app.Domain.Dto.MemberDto;
 
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -31,7 +35,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 				System.out.println("role : " + role.getAuthority());
 				if(role_str.equals("ROLE_USER")) {
 					
-					System.out.println("USER 페이지로 이동!");
+					System.out.println("USER 페이지로 이동!");    
 					response.sendRedirect(request.getContextPath()+"/indexlog");
 					return ;
 				}else if(role_str.equals("ROLE_MEMBER")){

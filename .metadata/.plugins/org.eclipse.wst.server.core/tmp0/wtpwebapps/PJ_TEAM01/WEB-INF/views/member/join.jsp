@@ -146,6 +146,7 @@
             window.location.href = 'http://localhost:8080/app/member/login'
         })
         .catch(error=>{});
+    })
 		
 		
 	</script>
