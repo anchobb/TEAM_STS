@@ -1,0 +1,86 @@
+package com.test.app.Domain.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.test.app.Config.auth.PrincipalDetails;
+import com.test.app.Controller.MembershipController;
+import com.test.app.Domain.Dto.MembershipDto;
+import com.test.app.Domain.Mapper.MembershipMapper;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+public class MembershipService{
+	
+	@Autowired
+	MembershipMapper membershipMapper;
+	
+	@Autowired
+	MembershipController membershipController;
+	
+	
+	public List<MembershipDto> getAllMember(){
+		return membershipMapper.membershipsearchAll();
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public void addMembership(MembershipDto dto, Authentication authentication) {
+		LocalDate startDate = LocalDate.now();
+		LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+		
+		if(membershipController.pay1() != null) {
+			dto.setMembershipCode("WM_1");
+		}
+		if(membershipController.pay2() !=null) {
+			dto.setMembershipCode("WM_2");
+		}
+		
+		PrincipalDetails principalDetails = (PrincipalDetails)authentication.getPrincipal();
+		dto.setId(principalDetails.getUsername());
+		dto.setName(principalDetails.getName());
+		dto.setStartDate(startDate);
+		dto.setEndDate(endDate);
+		membershipMapper.insert(dto);
+	}
+	
+	
+	@Transactional(rollbackFor = Exception.class)
+	public void modifyMembership(MembershipDto dto) {
+		membershipMapper.update(dto);
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public void removeMembership(String id) {
+		membershipMapper.delete(id);
+	}
+	
+	public List<MembershipDto> getMembershipCode(int membershipCode) {
+        List<MembershipDto> membership = membershipMapper.selectCode(membershipCode);
+        return membership;
+    }
+	
+	public List<MembershipDto> getMembershipDate(LocalDate date){
+		List<MembershipDto> endDateList = (List<MembershipDto>) membershipMapper.selectEnd(date);
+		return endDateList;
+	}
+	
+	public void getMembershipId(String id) {
+		MembershipDto msdto = membershipMapper.selectId(id);
+		if(msdto!=null)
+			System.out.println(msdto);
+		else
+			System.out.println("없음");
+	}
+
+	
+	
+	
+	
+}

@@ -33,16 +33,23 @@
 			<span>${dto.id}</span>&nbsp;&nbsp;<span>${dto.name}</span>
 			&nbsp;&nbsp;<span>${dto.addr}</span>&nbsp;&nbsp;<span>${dto.phone}</span><br/>
 		</c:forEach> --%>
-    	<c:forEach items="${list}" var="dto">
 			<table>
 				<tr>
-					<td style="width:100px; height:25px;">${dto.id}</td>
-					<td style="width:100px; height:25px;">${dto.name}</td>
-					<td style="width:100px; height:25px;">${dto.addr}</td>
-					<td style="width:100px; height:25px;">${dto.phone}</td>
+					<td class="user_title">ID</td>
+					<td class="user_title">NAME</td>
+					<td class="user_title">ADDRESS</td>
+					<td class="user_title">PHONE</td>
 				</tr>
-			</table>
+    	<c:forEach items="${list}" var="dto">
+				<tr>
+					<td id="id">${dto.id}</td>
+					<td id="name">${dto.name}</td>
+					<td id="addr">${dto.addr}</td>
+					<td id="phone">${dto.phone}</td>
+				</tr>
 		</c:forEach>
+			</table>
+		
     	
     	</div>
 		<br />
@@ -113,6 +120,34 @@
 	//회원 단건조회 script
 	
 	//회원 삭제 script
+	document.addEventListener("DOMContentLoaded", function () {
+       const form = document.querySelector('.removeuser');
+       const searchInput = document.querySelector('#remove_input');
+
+       form.addEventListener('click', async function (event) {
+           event.preventDefault();
+
+           const searchValue = searchInput.value;
+
+           try {
+               const response = await axios.post('/app/member/remove', null, {
+                   params: { id: searchValue }
+               });
+               console.log('서버 응답:', response);
+               alert('삭제가 완료되었습니다.');
+               location.reload();
+           } catch (error) {
+               if (error.response) {
+                   console.error('서버 응답 오류:', error.response.data);
+               } else {
+                   console.error('요청 오류:', error.message);
+               }
+               // 오류가 발생했을 때 처리
+               alert('삭제에 실패했습니다.');
+           }
+       });
+   });
+	
 	
 	</script>
 

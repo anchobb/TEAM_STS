@@ -13,35 +13,6 @@
 	<%@include file="/resources/static/css/footer.css" %>
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-	document.addEventListener("DOMContentLoaded", function() {
-	    
-		async function checkDuplicateId() {
-			var id = document.getElementById("id_input").value;
-
-			try {
-				const response = await axios.post("${pageContext.request.contextPath}/checkDuplicate", {
-					id: id
-				});
-
-				const isDuplicate = response.data;
-				if (!isDuplicate) {
-					alert("이미 사용 중인 아이디입니다.");
-				} else {
-					alert("사용 가능한 아이디입니다.");
-				}
-			} catch (error) {
-				alert("중복 확인 중에 오류가 발생했습니다.");
-			}
-		}
-		
-	    document.getElementById("idcheck_btn").addEventListener("click", checkDuplicateId);
-	});
-	
-	
-</script>
-
 </head>
 <body>
 
@@ -60,28 +31,29 @@
 
 		<section class="join">
 			<h1>워터멜론과 함께 하세요!</h1>
-			<form action="${pageContext.request.contextPath}/member/join" method="post">
-				<ul>
-					<li><span>ID</span> <!-- <span id="id_check">*id중복여부표시</span> -->
-						<input id="id_input" name="id" type="text" placeholder="아이디"
-						title="아이디입력" required>
-						<button id="idcheck_btn" >중복확인</button></li>
-					<li><span>PW</span> <input id="pw_input" name="pw"
-						type="password" placeholder="비밀번호" title="비밀번호입력" required></li>
-					<li><span>PW Check</span> <!-- <span id="pw_check">*pw체크표시</span> -->
-						<input id="pwc_input" name="pwc_input" type="password"
-						placeholder="비밀번호확인" title="비밀번호확인" required></li>
-					<li><span>NAME</span> <input type="text" name="name"
-						placeholder="이름" title="이름입력" required></li>
-					<li><span>ADDRESS</span> <input id="addr_input" name="addr"
-						type="text" placeholder="주소" title="주소입력" required>
-						<button id="addr_btn">주소검색</button></li>
-					<li><input type="text" placeholder="동/호수 입력" title="주소입력"></li>
-					<li><span>PHONE</span> <input type="text" name="phone"
-						placeholder="핸드폰번호" title="핸드폰번호입력" required></li>
-					<li><button id="join_btn">JOIN!</button></li>
-				</ul>
-			</form>
+			<form method="post">
+            <ul>
+               <li><span>ID</span> <!-- <span id="id_check">*id중복여부표시</span> -->
+                  <input id="id_input" name="id" type="text" placeholder="아이디"
+                  title="아이디입력" required>
+                  <button id="idcheck_btn" >중복확인</button></li>
+               <li><span>PW</span> <input id="pw_input" name="pw"
+                  type="password" placeholder="비밀번호" title="비밀번호입력" required></li>
+               <li><span style="display:inline-block; width:100px">PW Check</span>
+               <span id="pw_mismatch_msg" style="color: red; font-size:15px; display:inline-block;"></span>
+                  <input id="pwc_input" name="pwc_input" type="password"
+                  placeholder="비밀번호확인" title="비밀번호확인" required></li>
+               <li><span>NAME</span> <input type="text" name="name"
+                  placeholder="이름" title="이름입력" required></li>
+               <li><span>ADDRESS</span> <input id="addr_input" name="addr"
+                  type="text" placeholder="주소" title="주소입력" required>
+                  <button id="addr_btn">주소검색</button></li>
+               <li><input type="text" placeholder="동/호수 입력" title="주소입력"></li>
+               <li><span>PHONE</span> <input type="text" name="phone"
+                  placeholder="핸드폰번호" title="핸드폰번호입력" required></li>
+               <li><button id="join_btn">JOIN!</button></li>
+            </ul>
+         </form>
 		</section>
 
 		<footer>
@@ -135,21 +107,55 @@
 	</script> -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	
-	<script>
-	const join_btn_el = document.querySelector('.join_btn');
-    join_btn_el.addEventListener('click', function () {
-        axios.post('http://localhost:8080/app/member/join')
-        .then(response=>{
-            console.log("join Success");
-            console.log(response);
-            console.log(response.data);
-            window.location.href = 'http://localhost:8080/app/member/login'
-        })
-        .catch(error=>{});
-    })
-		
-		
-	</script>
+<script>
+   
+      async function checkDuplicateId() {
+         var id = document.getElementById("id_input").value;
+      
+         try {
+            const response = await axios.get(`${pageContext.request.contextPath}/member/checkDuplicate`, {
+                     params : { id : id },
+            });
+      
+            const isDuplicate = response.data;
+            if (!isDuplicate) {
+               alert("이미 사용 중인 아이디입니다.");
+            } else {
+               alert("사용 가능한 아이디입니다.");
+            }
+         } catch (error) {
+            alert("중복 확인 중에 오류가 발생했습니다.");
+         }
+         
+      }
+      document.getElementById("idcheck_btn").addEventListener("click", checkDuplicateId);
+         
+      //------------------------------------------------------------------------------------- 
+       document.addEventListener("DOMContentLoaded", function() {
+             // ...
+   
+             function checkPasswordsMatch() {
+                 var pwInput = document.getElementById("pw_input").value;
+                 var pwcInput = document.getElementById("pwc_input").value;
+                 var pwMismatchMsg = document.getElementById("pw_mismatch_msg");
+   
+                 if (pwInput !== pwcInput) {
+                     pwMismatchMsg.textContent = "비밀번호가 일치하지 않습니다.";
+                     return false;
+                 } else {
+                     pwMismatchMsg.textContent = ""; // 일치하면 메시지를 지웁니다.
+                     return true;
+                 }
+             }
+   
+             document.getElementById("join_btn").addEventListener("click", function(event) {
+                 if (!checkPasswordsMatch()) {
+                     event.preventDefault(); // 비밀번호 불일치 시 폼 제출을 막습니다.
+                 }
+             });
+         }); 
+ 
+   </script>
 	
 	
 </body>

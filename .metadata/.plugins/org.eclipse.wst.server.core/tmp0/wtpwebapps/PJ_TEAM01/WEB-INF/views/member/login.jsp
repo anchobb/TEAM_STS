@@ -74,28 +74,14 @@
             </footer>
     </div>
     
-   <!--  <script
+   <script
 			src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
 			integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
-			crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+			crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
-    <!-- <script>
+  
 
-	const login = document.getElementById("login");
-	login.addEventListener('click', function(evnet){
-		event.preventDefault();
-		const form = document.querySelector('form');
-		
-		axios.post(form.action)
-		.then(response=>{
-			window.location.href = response.data.redirectUrl;
-			console.log("success!");
-		})
-		.catch(error=>{
-			console.log("error!");
-		})
-	})
-    </script> -->
+	
  
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -163,6 +149,8 @@ document.addEventListener('DOMContentLoaded', function () {
         return unescape(cookieValue);
     }
 });
+
+
 
 </script>
     
