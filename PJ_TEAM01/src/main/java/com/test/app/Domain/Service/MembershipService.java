@@ -38,7 +38,7 @@ public class MembershipService{
 		//request1, 2에 따라서 코드 다르게 적용,, 고치는 중,,ㅠㅠㅠㅠㅠㅠㅠ
 		if(membershipController.pay1() != null) {
 			dto.setMembershipCode("WM_1");
-			//e도대체 왜 안되는건가
+			//e도대체 왜 안되는건가ㅇㄴㄹㄴㄹㄴㄹㄴㅇㄹㄴㄹㄹ
 		}
 		else if(membershipController.pay2() !=null) {
 			dto.setMembershipCode("WM_2");
