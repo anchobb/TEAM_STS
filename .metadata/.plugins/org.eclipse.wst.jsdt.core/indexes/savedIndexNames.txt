@@ -1,8 +1,6 @@
-INDEX VERSION 1.4+C:\workspace_team\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
-4002849348.index
-2462222823.index
-3315382389.index
-2773344915.index
-508916414.index
+INDEX VERSION 1.4+C:\workspace_team1\TEAM_STS\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+259826105.index
+1281057561.index
 2370732647.index
-825113584.index
+4040609109.index
+324665373.index
