@@ -1,17 +1,15 @@
 package com.test.app.Controller;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,7 +52,7 @@ public class MembershipController {
         params.add("quantity","1");
         params.add("total_amount", "6900");
         params.add("tax_free_amount", "0");
-        params.add("approval_url", "http://localhost:8080/app/membership/success");
+        params.add("approval_url", "http://localhost:8080/app/membership/success1");
         params.add("fail_url", "http://localhost:8080/app/membership/fail");
         params.add("cancel_url", "http://localhost:8080/app/membership/cancel");
 		
@@ -89,7 +87,7 @@ public class MembershipController {
         params.add("quantity","1");
         params.add("total_amount", "9900");
         params.add("tax_free_amount", "0");
-        params.add("approval_url", "http://localhost:8080/app/membership/success");
+        params.add("approval_url", "http://localhost:8080/app/membership/success2");
         params.add("fail_url", "http://localhost:8080/app/membership/fail");
         params.add("cancel_url", "http://localhost:8080/app/membership/cancel");
 		
@@ -105,14 +103,23 @@ public class MembershipController {
 		return response;
 	}
 	
-		@GetMapping("/membership/success")
-	 	public @ResponseBody String success(MembershipDto dto, Authentication authentication) {
-	        log.info("GET /membership/success");
+		@GetMapping("/membership/success1")
+	 	public @ResponseBody String success1(MembershipDto dto, Authentication authentication, HttpServletRequest request) {
+	        log.info("GET /membership/success1");
 	        //멤버십DB에 정보 ADD해야함!!!!!!!!!!
-	        membershipService.addMembership(dto, authentication);
+	        membershipService.addMembership(dto, authentication, request);
 	        log.info(dto.toString());
 	        return "Subscribe Success!";
 	    }
+		
+		@GetMapping("/membership/success2")
+		public @ResponseBody String success2(MembershipDto dto, Authentication authentication, HttpServletRequest request) {
+			log.info("GET /membership/success2");
+			//멤버십DB에 정보 ADD해야함!!!!!!!!!!
+			membershipService.addMembership(dto, authentication, request);
+			log.info(dto.toString());
+			return "Subscribe Success!";
+		}
 		
 		
 	    @GetMapping("/membership/cancel")

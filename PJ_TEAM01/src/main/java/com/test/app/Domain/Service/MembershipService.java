@@ -3,6 +3,8 @@ package com.test.app.Domain.Service;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -31,18 +33,17 @@ public class MembershipService{
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	public void addMembership(MembershipDto dto, Authentication authentication) {
+	public void addMembership(MembershipDto dto, Authentication authentication, HttpServletRequest request) {
 		LocalDate startDate = LocalDate.now();
 		LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+		String requestURL = request.getRequestURL().toString();
 		
-		//request1, 2에 따라서 코드 다르게 적용,, 고치는 중,,ㅠㅠㅠㅠㅠㅠㅠ
-		if(membershipController.pay1() != null) {
-			dto.setMembershipCode("WM_1");
-			//e도대체 왜 안되는건가ㅇㄴㄹㄴㄹㄴㄹㄴㅇㄹㄴㄹㄹ
-		}
-		else if(membershipController.pay2() !=null) {
-			dto.setMembershipCode("WM_2");
-		}
+		//request1, 2에 따라서 코드 다르게 적용
+		if (requestURL.contains("/membership/success1")) {
+	        dto.setMembershipCode("WMMcode_1");
+	    } else if (requestURL.contains("/membership/success2")) {
+	        dto.setMembershipCode("WMMcode_2");
+	    }
 		
 		PrincipalDetails principalDetails = (PrincipalDetails)authentication.getPrincipal();
 		dto.setId(principalDetails.getUsername());
@@ -50,6 +51,7 @@ public class MembershipService{
 		dto.setStartDate(startDate);
 		dto.setEndDate(endDate);
 		membershipMapper.insert(dto);
+		System.out.println(dto);
 	}
 	
 	
