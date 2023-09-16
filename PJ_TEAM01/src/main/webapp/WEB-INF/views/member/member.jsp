@@ -35,17 +35,17 @@
 		</c:forEach> --%>
 			<table>
 				<tr>
-					<td class="user_title">ID</td>
-					<td class="user_title">NAME</td>
-					<td class="user_title">ADDRESS</td>
-					<td class="user_title">PHONE</td>
+					<td class="user_title1" style="color:rgb(92, 115, 6);">ID</td>
+					<td class="user_title1" style="color:rgb(92, 115, 6);">NAME</td>
+					<td class="user_title2" style="color:rgb(92, 115, 6);">ADDRESS</td>
+					<td class="user_title2" style="color:rgb(92, 115, 6);">PHONE</td>
 				</tr>
     	<c:forEach items="${list}" var="dto">
 				<tr>
-					<td id="id">${dto.id}</td>
-					<td id="name">${dto.name}</td>
-					<td id="addr">${dto.addr}</td>
-					<td id="phone">${dto.phone}</td>
+					<td class="user_title1">${dto.id}</td>
+					<td class="user_title1">${dto.name}</td>
+					<td class="user_title2">${dto.addr}</td>
+					<td class="user_title2">${dto.phone}</td>
 				</tr>
 		</c:forEach>
 			</table>

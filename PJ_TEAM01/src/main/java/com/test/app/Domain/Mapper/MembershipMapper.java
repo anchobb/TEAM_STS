@@ -23,7 +23,7 @@ public interface MembershipMapper {
 	@Delete("delete from tbl_membership where id=#{id}")
 	public void delete(String id);
 	
-	@Select("select * from tbl_membership")
+	@Select("select * from tbl_membership order by membershipCode asc")
 	public List<MembershipDto> membershipsearchAll();
 	
 	@Select("select * from tbl_member where endDate=#{endDate}")

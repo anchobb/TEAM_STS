@@ -30,16 +30,10 @@ public class MembershipController {
 	@Autowired
 	MembershipService membershipService;
 	
-	
-	//@GetMapping("/membership")
-	//public void membership() {
-	//	log.info("GET /membership");
-	//}
-	
+	//멤버십 가입을 눌렀을 때 멤버, 유저 매핑 다르게
 	@GetMapping("/membership")
 	public String membership(HttpSession session, Authentication authentication, Model model) {
 		System.out.println("authentication : " + authentication);
-		
 		
 		return membershipRequest(session);
 	}	
@@ -47,6 +41,7 @@ public class MembershipController {
 
 	@PostMapping("/membership")
 	public String membership_post(HttpSession session) {
+		
 		return membershipRequest(session);
 	}
 
@@ -73,7 +68,7 @@ public class MembershipController {
 	}
 	
 	
-	
+	//유저 멤버십페이지에서 WM_1 결제
 	@GetMapping("/membership/request1")
 	public @ResponseBody membershipResponse pay1() {
 		//url
@@ -109,6 +104,7 @@ public class MembershipController {
 		return response;
 	}
 	
+	//유저 멤버십페이지에서 WM_2 결제
 	@GetMapping("/membership/request2")
 	public @ResponseBody membershipResponse pay2() {
 		//url
@@ -144,6 +140,7 @@ public class MembershipController {
 		return response;
 	}
 	
+	///유저 멤버십페이지에서 WM_1 결제 성공시 매핑
 		@GetMapping("/membership/success1")
 	 	public @ResponseBody String success1(MembershipDto dto, Authentication authentication, HttpServletRequest request) {
 	        log.info("GET /membership/success1");
@@ -153,32 +150,29 @@ public class MembershipController {
 	        return "Subscribe Success!";
 	    }
 		
-		@GetMapping("/membership/success2")
-		public @ResponseBody String success2(MembershipDto dto, Authentication authentication, HttpServletRequest request) {
-			log.info("GET /membership/success2");
-			//멤버십DB에 정보 ADD해야함!!!!!!!!!!
-			membershipService.addMembership(dto, authentication, request);
-			log.info(dto.toString());
-			return "Subscribe Success!";
-		}
+	//유저 멤버십페이지에서 WM_2 결제 성공시 매핑
+	@GetMapping("/membership/success2")
+	public @ResponseBody String success2(MembershipDto dto, Authentication authentication, HttpServletRequest request) {
+		log.info("GET /membership/success2");
+		//멤버십DB에 정보 ADD해야함!!!!!!!!!!
+		membershipService.addMembership(dto, authentication, request);
+		log.info(dto.toString());
+		return "Subscribe Success!";
+	}
 		
-		
-	    @GetMapping("/membership/cancel")
-	    public @ResponseBody String cancel() {
-	        log.info("GET /membership/cancel");
-	        return "Subscribe Cancel..";
-	    }
-	    @GetMapping("/membership/fail")
-	    public @ResponseBody String fail() {
-	        log.info("GET /membership/fail");
-	        return "Subscribe Fail..";
-	    }
-	
-	    
-	    
-	    
-	    
-	    
+	//유저 멤버십페이지에서 결제 취소 매핑
+	@GetMapping("/membership/cancel")
+	public @ResponseBody String cancel() {
+	    log.info("GET /membership/cancel");
+	    return "Subscribe Cancel..";
+	}
+	    //유저 멤버십페이지에서 결제 실패 매핑
+	@GetMapping("/membership/fail")
+	public @ResponseBody String fail() {
+	    log.info("GET /membership/fail");
+	    return "Subscribe Fail..";
+	}
+	    	    
 }
 
 @Data

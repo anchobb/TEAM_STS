@@ -9,7 +9,7 @@
 <style>
 		<%@include file="/resources/static/css/common.css" %>
 		<%@include file="/resources/static/css/header.css" %>
-		<%@include file="/resources/static/css/member_Page.css" %>
+		<%@include file="/resources/static/css/membershipM_Page.css" %>
 		<%@include file="/resources/static/css/footer.css" %>		
 </style>
 </head>
@@ -27,25 +27,23 @@
 <section class="membership_M">
 	<h1>관리자 페이지입니다.</h1>
 	<ul>
-		<li><span class="title">전체멤버십회원조회<button class="alluser" id="showButton">조회하기</button></span><hr/></li>
+		<li><span class="title">멤버십회원 전체조회<button class="alluser" id="showButton">조회하기</button></span><hr/></li>
 		<div class="selectall">
-    	<%-- <c:forEach items="${list}" var="dto">
-			<span>${dto.id}</span>&nbsp;&nbsp;<span>${dto.name}</span>
-			&nbsp;&nbsp;<span>${dto.addr}</span>&nbsp;&nbsp;<span>${dto.phone}</span><br/>
-		</c:forEach> --%>
 			<table>
 				<tr>
-					<td class="user_title">ID</td>
-					<td class="user_title">NAME</td>
-					<td class="user_title">ADDRESS</td>
-					<td class="user_title">PHONE</td>
+					<td class="search_title1" style="color:rgb(92, 115, 6);">CODE</td>
+					<td class="search_title1" style="color:rgb(92, 115, 6);">ID</td>
+					<td class="search_title1" style="color:rgb(92, 115, 6);">NAME</td>
+					<td class="search_title2" style="color:rgb(92, 115, 6);">START_DATE</td>
+					<td class="search_title2" style="color:rgb(92, 115, 6);">END_DATE</td>
 				</tr>
     	<c:forEach items="${list}" var="dto">
 				<tr>
-					<td id="id">${dto.id}</td>
-					<td id="name">${dto.name}</td>
-					<td id="addr">${dto.addr}</td>
-					<td id="phone">${dto.phone}</td>
+					<td id="search_title1">${dto.membershipCode}</td>
+					<td id="search_title1">${dto.id}</td>
+					<td id="search_title1">${dto.name}</td>
+					<td id="search_title2">${dto.startDate}</td>
+					<td id="search_title2">${dto.endDate}</td>
 				</tr>
 		</c:forEach>
 			</table>
@@ -53,13 +51,19 @@
     	
     	</div>
 		<br />
-		<li><span class="title">회원 검색</span><hr/></li>
-		<form action="member/search" method="post">
-	    <div class="search_block" style= display="none">
-	    <input type="text" id="search_input" name="id" placeholder="검색할 id를 입력하세요">
-	    <button class="oneuser" type="submit" >검색</button>
-	    </div>
-	    <div class="oneshowBlock"></div>
+		<li><span class="title">멤버십 키워드검색</span><hr/></li>
+		<form action="membership/search" method="post">
+		    <div class="search_block" style= display="none">
+				<select id="select">
+					<option value="">키워드 선택</option> 
+					<option value="code">CODE 검색</option> 
+					<option value="id">ID 검색</option> 
+					<option value="endDate">종료날짜 검색</option> 
+				</select>
+			    <input type="text" id="search_input" placeholder="검색할 키워드를 선택하세요">
+			    <button class="oneuser" type="submit" >검색</button>
+		    </div>
+		    <div class="oneshowBlock"></div>
 		</form> 
 		<br />
 		<li><span class="title">회원 삭제</span><hr/></li>
@@ -118,6 +122,30 @@
 	
 	
 	//회원 단건조회 script
+        // 옵션 선택이 변경될 때 이벤트 리스너를 추가합니다.
+        document.getElementById("select").addEventListener("change", function () {
+            var selectedOption = this.value;
+            var searchInput = document.getElementById("search_input");
+
+            // 선택된 옵션에 따라 입력 필드의 라벨을 변경합니다.
+            switch (selectedOption) {
+                case "code":
+                    searchInput.name = "code";
+                    searchInput.placeholder = "Membership Code를 입력하세요";
+                    break;
+                case "id":
+                    searchInput.name = "id";
+                    searchInput.placeholder = "검색할 ID를 입력하세요";
+                    break;
+                case "endDate":
+                    searchInput.name = "endDate";
+                    searchInput.placeholder = "검색할 종료날짜를 입력하세요";
+                    break;
+                default:
+                    // 키워드 선택이나 다른 옵션을 선택한 경우 처리할 내용을 추가할 수 있습니다.
+                    break;
+            }
+        });
 	
 	//회원 삭제 script
 	document.addEventListener("DOMContentLoaded", function () {
