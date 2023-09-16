@@ -1,15 +1,18 @@
 package com.test.app.Controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,10 +31,48 @@ public class MembershipController {
 	MembershipService membershipService;
 	
 	
+	//@GetMapping("/membership")
+	//public void membership() {
+	//	log.info("GET /membership");
+	//}
+	
 	@GetMapping("/membership")
-	public void membership() {
-		log.info("GET /membership");
+	public String membership(HttpSession session, Authentication authentication, Model model) {
+		System.out.println("authentication : " + authentication);
+		
+		
+		return membershipRequest(session);
+	}	
+		
+
+	@PostMapping("/membership")
+	public String membership_post(HttpSession session) {
+		return membershipRequest(session);
 	}
+
+	private String membershipRequest(HttpSession session) {
+		String role = (String) session.getAttribute("role");
+		if ("ROLE_USER".equals(role)) {
+			System.out.println("user's membership");
+			return "redirect:/membershipU";
+		} else if ("ROLE_MEMBER".equals(role)) {
+			System.out.println("member's membership");
+			return "redirect:/membershipM";
+		}
+		return "redirect:/indexlog";
+	}
+	
+	@GetMapping("/membershipU")
+	public void membership_U() {
+		log.info("GET /memberhsipU");
+	}
+	
+	@GetMapping("/membershipM")
+	public void membership_M() {
+		log.info("GET /memberhsipM");
+	}
+	
+	
 	
 	@GetMapping("/membership/request1")
 	public @ResponseBody membershipResponse pay1() {

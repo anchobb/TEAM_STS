@@ -1,0 +1,5 @@
+package com.test.app.RestController;
+
+public class PlayMP3 {
+
+}

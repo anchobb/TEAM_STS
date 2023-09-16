@@ -51,7 +51,7 @@ public class MembershipService{
 		dto.setStartDate(startDate);
 		dto.setEndDate(endDate);
 		membershipMapper.insert(dto);
-		System.out.println(dto);
+
 	}
 	
 	
@@ -65,16 +65,19 @@ public class MembershipService{
 		membershipMapper.delete(id);
 	}
 	
+	@Transactional(rollbackFor = Exception.class)
 	public List<MembershipDto> getMembershipCode(int membershipCode) {
         List<MembershipDto> membership = membershipMapper.selectCode(membershipCode);
         return membership;
     }
 	
+	@Transactional(rollbackFor = Exception.class)
 	public List<MembershipDto> getMembershipDate(LocalDate date){
 		List<MembershipDto> endDateList = (List<MembershipDto>) membershipMapper.selectEnd(date);
 		return endDateList;
 	}
 	
+	@Transactional(rollbackFor = Exception.class)
 	public void getMembershipId(String id) {
 		MembershipDto msdto = membershipMapper.selectId(id);
 		if(msdto!=null)
