@@ -40,9 +40,9 @@ public class MembershipService{
 		
 		//request1, 2에 따라서 코드 다르게 적용
 		if (requestURL.contains("/membership/success1")) {
-	        dto.setMembershipCode("WMMcode_1");
+	        dto.setMembershipCode("WMM_1");
 	    } else if (requestURL.contains("/membership/success2")) {
-	        dto.setMembershipCode("WMMcode_2");
+	        dto.setMembershipCode("WMM_2");
 	    }
 		
 		PrincipalDetails principalDetails = (PrincipalDetails)authentication.getPrincipal();
@@ -66,20 +66,20 @@ public class MembershipService{
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	public List<MembershipDto> getMembershipCode(int membershipCode) {
+	public List<MembershipDto> getMembershipCode(String membershipCode) {
         List<MembershipDto> membership = membershipMapper.selectCode(membershipCode);
         return membership;
     }
 	
 	@Transactional(rollbackFor = Exception.class)
 	public List<MembershipDto> getMembershipDate(LocalDate date){
-		List<MembershipDto> endDateList = (List<MembershipDto>) membershipMapper.selectEnd(date);
+		List<MembershipDto> endDateList = membershipMapper.selectEnd(date);
 		return endDateList;
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	public void getMembershipId(String id) {
-		MembershipDto msdto = membershipMapper.selectId(id);
+		List<MembershipDto> msdto = membershipMapper.selectId(id);
 		if(msdto!=null)
 			System.out.println(msdto);
 		else

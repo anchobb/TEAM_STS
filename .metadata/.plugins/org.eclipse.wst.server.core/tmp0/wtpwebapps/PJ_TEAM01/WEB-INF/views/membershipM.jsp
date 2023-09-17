@@ -39,11 +39,11 @@
 				</tr>
     	<c:forEach items="${list}" var="dto">
 				<tr>
-					<td id="search_title1">${dto.membershipCode}</td>
-					<td id="search_title1">${dto.id}</td>
-					<td id="search_title1">${dto.name}</td>
-					<td id="search_title2">${dto.startDate}</td>
-					<td id="search_title2">${dto.endDate}</td>
+					<td class="search_title1">${dto.membershipCode}</td>
+					<td class="search_title1">${dto.id}</td>
+					<td class="search_title1">${dto.name}</td>
+					<td class="search_title2">${dto.startDate}</td>
+					<td class="search_title2">${dto.endDate}</td>
 				</tr>
 		</c:forEach>
 			</table>
@@ -52,24 +52,57 @@
     	</div>
 		<br />
 		<li><span class="title">멤버십 키워드검색</span><hr/></li>
-		<form action="membership/search" method="post">
-		    <div class="search_block" style= display="none">
-				<select id="select">
-					<option value="">키워드 선택</option> 
-					<option value="code">CODE 검색</option> 
-					<option value="id">ID 검색</option> 
-					<option value="endDate">종료날짜 검색</option> 
-				</select>
-			    <input type="text" id="search_input" placeholder="검색할 키워드를 선택하세요">
-			    <button class="oneuser" type="submit" >검색</button>
-		    </div>
+		   <c:choose>
+			    <c:when test="${selectedOption == 'id'}">
+			        <!-- 'id' 옵션에 대한 HTML 렌더링 -->
+			        <div class="search_block">
+			            <form action="${pageContext.request.contextPath}/membership_selectId" method="post">
+			                <input type="text" class="search_input" name="id" placeholder="검색할 ID를 입력하세요">
+			                <button class="oneuser" type="submit">검색</button>
+			            </form>
+			        </div>
+			    </c:when>
+			    <c:when test="${selectedOption == 'code'}">
+			        <!-- 'code' 옵션에 대한 HTML 렌더링 -->
+			        <div class="search_block">
+			            <form action="${pageContext.request.contextPath}/membership_selectCode" method="post">
+			                <input type="text" class="search_input" name="code" placeholder="멤버십 코드를 입력하세요">
+			                <button class="oneuser" type="submit">검색</button>
+			            </form>
+			        </div>
+			    </c:when>
+			    <c:when test="${selectedOption == 'endDate'}">
+			        <!-- 'endDate' 옵션에 대한 HTML 렌더링 -->
+			        <div class="search_block">
+			            <form action="${pageContext.request.contextPath}/membership_selectDate" method="post">
+			                <input type="text" class="search_input" name="endDate" placeholder="검색할 종료 날짜를 입력하세요">
+			                <button class="oneuser" type="submit">검색</button>
+			            </form>
+			        </div>
+			    </c:when>
+			    <c:otherwise>
+			        <!-- 옵션이 선택되지 않은 경우 기본 HTML 렌더링 -->
+			        <div class="search_block">
+			            <select id="select">
+			                <option value="">키워드 선택</option>
+			                <option value="id">ID</option>
+			                <option value="code">멤버십 코드</option>
+			                <option value="endDate">종료 날짜</option>
+			            </select>
+			            <form action="${pageContext.request.contextPath}/membership_select" method="post">
+			                <input type="text" class="search_input" placeholder="검색할 키워드를 선택하세요">
+			                <button class="oneuser" type="submit">검색</button>
+			            </form>
+			        </div>
+			    </c:otherwise>
+			</c:choose>
+
 		    <div class="oneshowBlock"></div>
-		</form> 
 		<br />
 		<li><span class="title">회원 삭제</span><hr/></li>
-		<form action="${pageContext.request.contextPath}/member/remove" method="post">
-    	<input type="text" id="remove_input" name="id" placeholder="사용자 검색">
-    	<button class="removeuser">삭제</button>
+		<form action="${pageContext.request.contextPath}/membership_delete" method="post">
+    	<input type="text" id="remove_input" name="id" placeholder="멤버십에서 삭제할 ID를 입력하세요">
+    	<button class="ms_delete">삭제</button>
 		</form>
 		<br />
 	</ul>
@@ -122,34 +155,52 @@
 	
 	
 	//회원 단건조회 script
-        // 옵션 선택이 변경될 때 이벤트 리스너를 추가합니다.
-        document.getElementById("select").addEventListener("change", function () {
-            var selectedOption = this.value;
-            var searchInput = document.getElementById("search_input");
+document.addEventListener('DOMContentLoaded', function() {
+    var select = document.getElementById('select');
+    var searchBlock = document.querySelector('.search_block');
 
-            // 선택된 옵션에 따라 입력 필드의 라벨을 변경합니다.
-            switch (selectedOption) {
-                case "code":
-                    searchInput.name = "code";
-                    searchInput.placeholder = "Membership Code를 입력하세요";
-                    break;
-                case "id":
-                    searchInput.name = "id";
-                    searchInput.placeholder = "검색할 ID를 입력하세요";
-                    break;
-                case "endDate":
-                    searchInput.name = "endDate";
-                    searchInput.placeholder = "검색할 종료날짜를 입력하세요";
-                    break;
-                default:
-                    // 키워드 선택이나 다른 옵션을 선택한 경우 처리할 내용을 추가할 수 있습니다.
-                    break;
-            }
-        });
+    // 옵션 선택이 변경될 때 이벤트 리스너 추가
+    select.addEventListener('change', function() {
+        var selectedOption = select.value;
+        var formAction = '';
+        var inputName = '';
+        var inputPlaceholder = '';
+
+        // 선택된 옵션에 따라서 form action, input name, placeholder 설정
+        if (selectedOption === 'id') {
+            formAction = '${pageContext.request.contextPath}/membership_selectId';
+            inputName = 'id';
+            inputPlaceholder = '검색할 ID를 입력하세요';
+        } else if (selectedOption === 'code') {
+            formAction = '${pageContext.request.contextPath}/membership_selectCode';
+            inputName = 'code';
+            inputPlaceholder = '멤버십 코드를 입력하세요';
+        } else if (selectedOption === 'endDate') {
+            formAction = '${pageContext.request.contextPath}/membership_selectDate';
+            inputName = 'endDate';
+            inputPlaceholder = '검색할 종료 날짜를 입력하세요';
+        } else {
+            // 기본 옵션 처리
+            formAction = null;
+            inputName = '';
+            inputPlaceholder = '검색할 키워드를 선택하세요';
+        }
+
+        // 폼과 입력 필드 업데이트
+        var form = searchBlock.querySelector('form');
+        form.action = formAction;
+        var input = form.querySelector('.search_input');
+        input.name = inputName;
+        input.placeholder = inputPlaceholder;
+    });
+});
+
+	
+	
 	
 	//회원 삭제 script
 	document.addEventListener("DOMContentLoaded", function () {
-       const form = document.querySelector('.removeuser');
+       const form = document.querySelector('.ms_delete');
        const searchInput = document.querySelector('#remove_input');
 
        form.addEventListener('click', async function (event) {
@@ -158,7 +209,7 @@
            const searchValue = searchInput.value;
 
            try {
-               const response = await axios.post('/app/member/remove', null, {
+               const response = await axios.post('/app/membership_delete', null, {
                    params: { id: searchValue }
                });
                console.log('서버 응답:', response);

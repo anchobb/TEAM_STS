@@ -1,5 +1,9 @@
 package com.test.app.Controller;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -13,6 +17,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,7 +43,6 @@ public class MembershipController {
 		return membershipRequest(session);
 	}	
 		
-
 	@PostMapping("/membership")
 	public String membership_post(HttpSession session) {
 		
@@ -63,8 +67,72 @@ public class MembershipController {
 	}
 	
 	@GetMapping("/membershipM")
-	public void membership_M() {
+	public void membership_M(Model model) {
 		log.info("GET /memberhsipM");
+		List<MembershipDto> list = membershipService.getAllMember();
+		
+		List<MembershipDto> membershipDtoList = list.stream()
+	            .collect(Collectors.toList());
+
+		membershipDtoList.forEach((dto) -> {
+	        System.out.println(dto);
+	    });
+
+	    model.addAttribute("list", membershipDtoList);
+	}
+	
+	
+	//membership 개별 유저 조회 관련 매핑(ID)
+	@GetMapping("/membership_selectId")
+	public void membership_selectId(@RequestParam String id) {
+		log.info("GET /membership_M select ID");
+	}
+	
+	@PostMapping("/membership_selectId")
+	public String membership_selectId_post(@RequestParam String id) {
+		log.info("POST /memberhsip_M select ID");
+		membershipService.getMembershipId(id);
+		return "redirect:membershipM";
+	}
+	
+	//membership 개별 유저 조회 관련 매핑(CODE)
+	@GetMapping("/membership_selectCode")
+	public void membership_selectCode(@RequestParam String membershipCode) {
+		log.info("GET /membership_M select CODE");
+	}
+	
+	@PostMapping("/membership_selectCode")
+	public String membership_selectCode_post(@RequestParam String membershipCode) {
+		log.info("POST /memberhsip_M select ID");
+		membershipService.getMembershipCode(membershipCode);
+		return "redirect:membershipM";
+	}
+	
+	//membership 개별 유저 조회 관련 매핑(종료일자)
+	@GetMapping("/membership_selectDate")
+	public void membership_selectDate(@RequestParam LocalDate endDate) {
+		log.info("GET /membership_M select EndDate");
+	}
+	
+	@PostMapping("/membership_selectDate")
+	public String membership_selectDate_post(@RequestParam LocalDate endDate) {
+		log.info("POST /memberhsip_M select ID");
+		membershipService.getMembershipDate(endDate);
+		return "redirect:membershipM";
+	}
+	
+	
+	//membership 회원 삭제 관련 매핑
+	@GetMapping("/membership_delete")
+	public void membership_delete(@RequestParam String id) {
+		log.info("GET /membership_M delete");
+	}
+	
+	@PostMapping("/membership_delete")
+	public String membership_delete_post(@RequestParam String id) {
+		log.info("POST /membership_M delete");
+		membershipService.removeMembership(id);
+		return "redirect:membershipM";
 	}
 	
 	

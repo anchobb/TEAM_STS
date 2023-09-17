@@ -27,11 +27,11 @@ public interface MembershipMapper {
 	public List<MembershipDto> membershipsearchAll();
 	
 	@Select("select * from tbl_member where endDate=#{endDate}")
-	public MembershipDto selectEnd(LocalDate date);
+	public List<MembershipDto> selectEnd(LocalDate date);
 	
 	@Select("select * from tbl_member where id=#{id}")
-	public MembershipDto selectId(String id);
+	public List<MembershipDto> selectId(String id);
 	
 	@Select("select * from tbl_member where membershipCode=#{membershipCode}")
-	public List<MembershipDto> selectCode(int membershipCode);
+	public List<MembershipDto> selectCode(String membershipCode);
 }
