@@ -112,7 +112,7 @@ li{
 	}
 	
 	
-    .membership_M form .oneuser, .ms_delete{
+    .membership_M form .ms_search, .ms_delete{
         width: 82px;
         height: 40px;
         margin-left: 15px;

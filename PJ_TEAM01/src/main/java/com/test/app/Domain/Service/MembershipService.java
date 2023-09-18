@@ -67,27 +67,25 @@ public class MembershipService{
 	
 	@Transactional(rollbackFor = Exception.class)
 	public List<MembershipDto> getMembershipCode(String membershipCode) {
-        List<MembershipDto> membership = membershipMapper.selectCode(membershipCode);
-        return membership;
+		List<MembershipDto> selectedCode = membershipMapper.selectCode(membershipCode);
+        return selectedCode;
     }
 	
 	@Transactional(rollbackFor = Exception.class)
-	public List<MembershipDto> getMembershipDate(LocalDate date){
-		List<MembershipDto> endDateList = membershipMapper.selectEnd(date);
-		return endDateList;
+	public List<MembershipDto> getMembershipDate(LocalDate endDate){
+		List<MembershipDto> selectedDate = membershipMapper.selectDate(endDate);
+		return selectedDate;
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	public void getMembershipId(String id) {
-		List<MembershipDto> msdto = membershipMapper.selectId(id);
-		if(msdto!=null)
-			System.out.println(msdto);
+	public MembershipDto getMembershipId(String id) {
+		MembershipDto selectedId = membershipMapper.selectId(id);
+		if(selectedId!=null)
+			System.out.println(selectedId);
 		else
 			System.out.println("없음");
+		return selectedId;
 	}
-
-	
-	
 	
 	
 }

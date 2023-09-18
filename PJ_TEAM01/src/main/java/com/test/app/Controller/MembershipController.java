@@ -1,6 +1,8 @@
 package com.test.app.Controller;
 
+import java.beans.PropertyEditorSupport;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
@@ -15,7 +18,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,6 +43,7 @@ public class MembershipController {
 
 	@Autowired
 	MembershipService membershipService;
+	
 	
 	//멤버십 가입을 눌렀을 때 멤버, 유저 매핑 다르게
 	@GetMapping("/membership")
@@ -74,10 +84,6 @@ public class MembershipController {
 		List<MembershipDto> membershipDtoList = list.stream()
 	            .collect(Collectors.toList());
 
-		membershipDtoList.forEach((dto) -> {
-	        System.out.println(dto);
-	    });
-
 	    model.addAttribute("list", membershipDtoList);
 	}
 	
@@ -89,36 +95,76 @@ public class MembershipController {
 	}
 	
 	@PostMapping("/membership_selectId")
-	public String membership_selectId_post(@RequestParam String id) {
+	public void membership_selectId_post(@RequestParam String id, Model model) {
 		log.info("POST /memberhsip_M select ID");
-		membershipService.getMembershipId(id);
-		return "redirect:membershipM";
+		MembershipDto selectedId = membershipService.getMembershipId(id);
+		model.addAttribute(selectedId);
+		
 	}
+	
 	
 	//membership 개별 유저 조회 관련 매핑(CODE)
 	@GetMapping("/membership_selectCode")
 	public void membership_selectCode(@RequestParam String membershipCode) {
 		log.info("GET /membership_M select CODE");
+		
 	}
 	
 	@PostMapping("/membership_selectCode")
-	public String membership_selectCode_post(@RequestParam String membershipCode) {
-		log.info("POST /memberhsip_M select ID");
-		membershipService.getMembershipCode(membershipCode);
-		return "redirect:membershipM";
+	public void membership_selectCode_post(@RequestParam String membershipCode,Model model) {
+		log.info("POST /memberhsip_M select CODE");
+		List<MembershipDto> list = membershipService.getMembershipCode(membershipCode);
+		
+		List<MembershipDto> selectedCodeList = list.stream()
+	            .collect(Collectors.toList());
+
+	    model.addAttribute("list", selectedCodeList);
+		
+		System.out.println(selectedCodeList);
 	}
 	
+	
 	//membership 개별 유저 조회 관련 매핑(종료일자)
+	
+	@InitBinder
+	public void dataBinder(WebDataBinder dataBinder) {
+		System.out.println("MembershipController's dataBinder.. " + dataBinder);
+		//String("2022-01-01") -> LocalDate로 변환 Editor 
+		dataBinder.registerCustomEditor(LocalDate.class, "membershipCode", new MemberDtoEditor());
+		
+	}
+	
 	@GetMapping("/membership_selectDate")
 	public void membership_selectDate(@RequestParam LocalDate endDate) {
 		log.info("GET /membership_M select EndDate");
 	}
 	
+//	@PostMapping("/membership_selectDate")
+//	public void membership_selectDate_post(@RequestParam LocalDate endDate, Model model, BindingResult bindingResult) {
+//		log.info("POST /memberhsip_M select Date");
+//		List<MembershipDto> list = membershipService.getMembershipDate(endDate);
+//		List<MembershipDto> selectedDateList = list.stream()
+//	            .collect(Collectors.toList());
+//
+//	    model.addAttribute("list", selectedDateList);
+//		
+//		System.out.println(selectedDateList);
+//		
+//	}
+	
 	@PostMapping("/membership_selectDate")
-	public String membership_selectDate_post(@RequestParam LocalDate endDate) {
-		log.info("POST /memberhsip_M select ID");
-		membershipService.getMembershipDate(endDate);
-		return "redirect:membershipM";
+	public String membership_selectDate_post(@ModelAttribute MembershipDto dto,BindingResult bindingResult, Model model) {
+		log.info("POST /membership_selectDate" + dto.getEndDate());
+		if(bindingResult.hasFieldErrors()) {
+			
+			for (FieldError error : bindingResult.getFieldErrors()) {
+                System.out.println(error.getField() + ": " + error.getDefaultMessage());
+                model.addAttribute(error.getField(),error.getDefaultMessage());
+            }
+			return "membershipM";
+		}
+		
+		return "membership_selectDate";
 	}
 	
 	
@@ -212,7 +258,7 @@ public class MembershipController {
 		@GetMapping("/membership/success1")
 	 	public @ResponseBody String success1(MembershipDto dto, Authentication authentication, HttpServletRequest request) {
 	        log.info("GET /membership/success1");
-	        //멤버십DB에 정보 ADD해야함!!!!!!!!!!
+	        //멤버십DB에 정보 ADD
 	        membershipService.addMembership(dto, authentication, request);
 	        log.info(dto.toString());
 	        return "Subscribe Success!";
@@ -222,7 +268,7 @@ public class MembershipController {
 	@GetMapping("/membership/success2")
 	public @ResponseBody String success2(MembershipDto dto, Authentication authentication, HttpServletRequest request) {
 		log.info("GET /membership/success2");
-		//멤버십DB에 정보 ADD해야함!!!!!!!!!!
+		//멤버십DB에 정보 ADD
 		membershipService.addMembership(dto, authentication, request);
 		log.info(dto.toString());
 		return "Subscribe Success!";
@@ -253,5 +299,13 @@ class membershipResponse {
     private String android_app_scheme;
     private String ios_app_scheme;
     private String created_at;
+}
 
+class MemberDtoEditor extends PropertyEditorSupport{
+	//String->Object 
+	@Override
+	public void setAsText(String text) throws IllegalArgumentException {
+		System.out.println("MemberDtoEditor's setAsText : " + text);
+		setValue(LocalDate.parse( text , DateTimeFormatter.ofPattern("yyyy-MM-dd") ) );
+	}
 }
