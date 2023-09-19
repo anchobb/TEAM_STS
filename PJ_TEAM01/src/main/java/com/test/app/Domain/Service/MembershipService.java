@@ -80,10 +80,6 @@ public class MembershipService{
 	@Transactional(rollbackFor = Exception.class)
 	public MembershipDto getMembershipId(String id) {
 		MembershipDto selectedId = membershipMapper.selectId(id);
-		if(selectedId!=null)
-			System.out.println(selectedId);
-		else
-			System.out.println("없음");
 		return selectedId;
 	}
 	
